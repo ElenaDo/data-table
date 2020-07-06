@@ -73,6 +73,12 @@
   <template v-slot:item.body.reportScore="{ item }">
     {{ item.body.reportScore.toFixed(2) }}
   </template>
+  <template v-slot:item.createdAt="{ item }">
+    {{ formatDate(item.createdAt) }}
+  </template>
+  <template v-slot:item.publishedAt="{ item }">
+    {{ formatDate(item.publishedAt) }}
+  </template>
   </v-data-table>
 </v-card>
 </template>
@@ -135,6 +141,10 @@ export default {
       const [min, max] = this.filters.range;
       const score = report.body.reportScore;
       return (score >= min && score <= max);
+    },
+    formatDate(date) {
+      const dateObj = new Date(date);
+      return dateObj.toLocaleDateString();
     },
   },
 };
