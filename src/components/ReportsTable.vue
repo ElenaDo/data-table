@@ -15,19 +15,51 @@
   <v-card-text>
     <v-container fluid>
       <v-row>
-        <v-col cols="12" sm="3">
+        <v-col cols="12" sm="4">
           <v-select
             :items="['all', 'extended', 'intermediate', 'primary']"
             label="Report types"
             v-model="filters.type"
           ></v-select>
         </v-col>
-        <v-col cols="12" sm="3">
+        <v-col cols="12" sm="4">
           <v-select
             :items="['all', 'published', 'unpublished']"
             label="Published"
             v-model="filters.published"
           ></v-select>
+        </v-col>
+        <v-col cols="12" sm="4">
+          <p>Score range</p>
+          <v-range-slider
+          v-model="filters.range"
+          hide-details
+          dense
+          :min="50"
+          :max="150">
+          <template v-slot:prepend>
+            <v-text-field
+            :min="50"
+            :max="150"
+            hide-details
+            single-line
+            style="width: 50px"
+            v-model="filters.range[0]"
+            type="number">
+            </v-text-field>
+          </template>
+          <template v-slot:append>
+            <v-text-field
+            :min="50"
+            :max="150"
+            hide-details
+            single-line
+            style="width: 50px"
+            v-model="filters.range[1]"
+            type="number">
+            </v-text-field>
+          </template>
+          </v-range-slider>
         </v-col>
       </v-row>
     </v-container>
@@ -62,13 +94,16 @@ export default {
     filters: {
       type: 'all',
       published: 'all',
+      range: [50, 150],
     },
   }),
   computed: {
     filtered() {
       return this.reports
         .filter((report) => {
-          const filters = (this.filterType(report) && this.filterPublished(report));
+          const filters = (this.filterType(report)
+          && this.filterPublished(report))
+          && this.filterScore(report);
           return filters;
         });
     },
@@ -91,6 +126,11 @@ export default {
         return this.isPublished(publishedAt);
       }
       return !this.isPublished(publishedAt);
+    },
+    filterScore(report) {
+      const [min, max] = this.filters.range;
+      const score = report.body.reportScore;
+      return (score >= min && score <= max);
     },
   },
 };
