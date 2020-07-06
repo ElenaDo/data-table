@@ -1,8 +1,8 @@
 <template>
   <v-app>
-    <v-content>
-      <ReportsTable></ReportsTable>
-    </v-content>
+    <v-main>
+      <ReportsTable :loading="loading" :reports="reports"></ReportsTable>
+    </v-main>
   </v-app>
 </template>
 
@@ -14,7 +14,14 @@ export default {
   components: {
     ReportsTable,
   },
+  mounted() {
+    fetch('./reports.json')
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+  },
   data: () => ({
+    loading: false,
+    reports: [],
     //
   }),
 };
