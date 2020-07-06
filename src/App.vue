@@ -17,7 +17,9 @@ export default {
   mounted() {
     fetch('./reports.json')
       .then((response) => response.json())
-      .then((data) => console.log(data));
+      .then((data) => {
+        this.reports = data;
+      });
   },
   data: () => ({
     loading: false,
