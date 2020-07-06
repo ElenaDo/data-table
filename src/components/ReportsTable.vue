@@ -69,7 +69,11 @@
     :items="filtered"
     :loading="loading"
     :search="search"
-  ></v-data-table>
+  >
+  <template v-slot:item.body.reportScore="{ item }">
+    {{ item.body.reportScore.toFixed(2) }}
+  </template>
+  </v-data-table>
 </v-card>
 </template>
 
