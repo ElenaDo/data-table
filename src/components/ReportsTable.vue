@@ -22,7 +22,13 @@
             v-model="filters.type"
           ></v-select>
         </v-col>
-        <v-col cols="12" sm="3"></v-col>
+        <v-col cols="12" sm="3">
+          <v-select
+            :items="['all', 'published', 'unpublished']"
+            label="Published"
+            v-model="filters.published"
+          ></v-select>
+        </v-col>
       </v-row>
     </v-container>
   </v-card-text>
@@ -55,18 +61,36 @@ export default {
     search: '',
     filters: {
       type: 'all',
+      published: 'all',
     },
   }),
   computed: {
     filtered() {
       return this.reports
-        .filter((report) => this.filterType(report));
+        .filter((report) => {
+          const filters = (this.filterType(report) && this.filterPublished(report));
+          return filters;
+        });
     },
   },
   methods: {
     filterType(report) {
       if (this.filters.type === 'all') return true;
       return report.body.type === this.filters.type;
+    },
+    isPublished(date) {
+      const publishDate = new Date(date);
+      const today = new Date();
+      return (publishDate <= today);
+    },
+    filterPublished(report) {
+      const filterVal = this.filters.published;
+      const { publishedAt } = report;
+      if (filterVal === 'all') return true;
+      if (filterVal === 'published') {
+        return this.isPublished(publishedAt);
+      }
+      return !this.isPublished(publishedAt);
     },
   },
 };
