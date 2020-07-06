@@ -12,9 +12,23 @@
     >
     </v-text-field>
   </v-card-title>
+  <v-card-text>
+    <v-container fluid>
+      <v-row>
+        <v-col cols="12" sm="3">
+          <v-select
+            :items="['all', 'extended', 'intermediate', 'primary']"
+            label="Report types"
+            v-model="filters.type"
+          ></v-select>
+        </v-col>
+        <v-col cols="12" sm="3"></v-col>
+      </v-row>
+    </v-container>
+  </v-card-text>
   <v-data-table
     :headers="headers"
-    :items="reports"
+    :items="filtered"
     :loading="loading"
     :search="search"
   ></v-data-table>
@@ -39,6 +53,21 @@ export default {
       { text: 'Published', value: 'publishedAt' },
     ],
     search: '',
+    filters: {
+      type: 'all',
+    },
   }),
+  computed: {
+    filtered() {
+      return this.reports
+        .filter((report) => this.filterType(report));
+    },
+  },
+  methods: {
+    filterType(report) {
+      if (this.filters.type === 'all') return true;
+      return report.body.type === this.filters.type;
+    },
+  },
 };
 </script>
