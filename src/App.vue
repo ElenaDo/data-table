@@ -15,11 +15,18 @@ export default {
     ReportsTable,
   },
   mounted() {
-    fetch('./reports.json')
+    const url = './reports.json';
+    this.loading = true;
+    fetch(url)
+      .catch((err) => console.error('network error', err))
       .then((response) => response.json())
+      .catch((err) => console.error('invalid data', err))
       .then((data) => {
-        this.reports = data;
-      });
+        if (data) {
+          this.reports = data;
+        }
+      })
+      .finally(() => { this.loading = false; });
   },
   data: () => ({
     loading: false,
