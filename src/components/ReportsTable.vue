@@ -1,7 +1,11 @@
 <template>
 <v-card>
-  <v-card-title>
-    Reports
+  <v-toolbar
+      color="cyan"
+      dark
+    >
+    <!-- <v-app-bar-nav-icon></v-app-bar-nav-icon> -->
+    <v-toolbar-title>Report</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-text-field
       v-model="search"
@@ -11,26 +15,26 @@
       hide-details
     >
     </v-text-field>
-  </v-card-title>
+  </v-toolbar>
   <v-card-text>
     <v-container fluid>
       <v-row>
-        <v-col cols="12" sm="4">
+        <v-col cols="12" sm="4" class="mt-4">
           <v-select
             :items="['all', 'extended', 'intermediate', 'primary']"
             label="Report types"
             v-model="filters.type"
           ></v-select>
         </v-col>
-        <v-col cols="12" sm="4">
+        <v-col cols="12" sm="4" class="mt-4">
           <v-select
             :items="['all', 'published', 'unpublished']"
             label="Published"
             v-model="filters.published"
           ></v-select>
         </v-col>
-        <v-col cols="12" sm="4">
-          <p>Score range</p>
+        <v-col cols="12" sm="4" class="pt-0 mt-0">
+          <v-subheader>Score range</v-subheader>
           <v-range-slider
           v-model="filters.range"
           hide-details
@@ -39,6 +43,7 @@
           :max="150">
           <template v-slot:prepend>
             <v-text-field
+            class="pt-0"
             :min="50"
             :max="150"
             hide-details
@@ -50,6 +55,7 @@
           </template>
           <template v-slot:append>
             <v-text-field
+            class="pt-0"
             :min="50"
             :max="150"
             hide-details
@@ -65,6 +71,7 @@
     </v-container>
   </v-card-text>
   <v-data-table
+    class="mx-5"
     :headers="headers"
     :items="filtered"
     :loading="loading"
